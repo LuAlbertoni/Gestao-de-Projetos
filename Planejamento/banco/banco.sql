@@ -21,4 +21,5 @@ CREATE TABLE
     rendimento VARCHAR(50) DEFAULT NULL,
     usuario_id INT (11),
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE SET NULL
   );
