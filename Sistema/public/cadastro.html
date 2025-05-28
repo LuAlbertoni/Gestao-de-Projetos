@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro - Cozinha Inspirada</title>
+    <link rel="stylesheet" href="/css/global.css" />
+    <link rel="stylesheet" href="/css/auth.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="auth-container">
+      <h2 class="auth-title">Crie sua Conta</h2>
+
+      <div
+        id="error-message"
+        class="alert alert-error"
+        style="display: none"
+      ></div>
+      <div
+        id="success-message"
+        class="alert alert-success"
+        style="display: none"
+      ></div>
+
+      <form id="register-form">
+        <div class="form-group">
+          <label for="nome" class="form-label">
+            <i
+              class="far fa-user"
+              style="margin-right: 8px; color: var(--primary-color)"
+            ></i
+            >Nome:
+          </label>
+          <input
+            type="text"
+            id="nome"
+            name="nome"
+            class="form-control"
+            required
+            autocomplete="name"
+            placeholder="Seu nome completo"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="email" class="form-label">
+            <i
+              class="far fa-envelope"
+              style="margin-right: 8px; color: var(--primary-color)"
+            ></i
+            >Email:
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-control"
+            required
+            autocomplete="email"
+            placeholder="seu@email.com"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="senha" class="form-label">
+            <i
+              class="fas fa-lock"
+              style="margin-right: 8px; color: var(--primary-color)"
+            ></i
+            >Senha:
+          </label>
+          <input
+            type="password"
+            id="senha"
+            name="senha"
+            class="form-control"
+            required
+            minlength="6"
+            autocomplete="new-password"
+            placeholder="Mínimo de 6 caracteres"
+          />
+          <small
+            style="display: block; margin-top: 8px; color: var(--grey-text)"
+          >
+            <i class="fas fa-info-circle" style="margin-right: 5px"></i>
+            A senha deve ter pelo menos 6 caracteres
+          </small>
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          style="width: 100%; margin-top: 10px"
+        >
+          Criar Conta
+        </button>
+      </form>
+
+      <p class="text-center mt-3">
+        Já tem uma conta?
+        <a href="/entrar" style="color: var(--primary-color); font-weight: 600"
+          >Entrar</a
+        >
+      </p>
+
+      <div style="text-align: center; margin-top: 2rem">
+        <a
+          href="/"
+          style="
+            color: var(--grey-text);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+          "
+        >
+          <i class="fas fa-home" style="margin-right: 8px"></i> Voltar para
+          início
+        </a>
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("register-form")
+        .addEventListener("submit", (event) => {
+          event.preventDefault();
+
+          const submitButton = event.target.querySelector(
+            'button[type="submit"]'
+          );
+          submitButton.innerHTML =
+            '<i class="fas fa-spinner fa-spin"></i> Criando conta...';
+          submitButton.disabled = true;
+
+          const nome = document.getElementById("nome").value.trim();
+          const email = document.getElementById("email").value.trim();
+          const senha = document.getElementById("senha").value;
+          const errorElement = document.getElementById("error-message");
+          const successElement = document.getElementById("success-message");
+
+          errorElement.style.display = "none";
+          successElement.style.display = "none";
+
+          setTimeout(() => {
+            if (nome && email && senha.length >= 6) {
+              successElement.innerHTML =
+                '<i class="fas fa-check-circle"></i> Conta criada com sucesso! Redirecionando...';
+              successElement.style.display = "block";
+              document.getElementById("register-form").reset();
+              setTimeout(() => {
+                window.location.href = "/entrar";
+              }, 2000);
+            } else {
+              errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i> Verifique os dados inseridos.`;
+              errorElement.style.display = "block";
+              submitButton.innerHTML = "Criar Conta";
+              submitButton.disabled = false;
+            }
+          }, 1200);
+        });
+
+      document.addEventListener("DOMContentLoaded", () => {
+      });
+    </script>
+  </body>
+</html>
