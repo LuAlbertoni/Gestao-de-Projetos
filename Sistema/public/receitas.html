@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Suas Receitas - Cozinha Inspirada</title>
+    <link rel="stylesheet" href="/css/global.css" />
+    <link rel="stylesheet" href="/css/receitas.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="app-container">
+      <header class="app-header">
+        <div class="header-content">
+          <div class="header-title">
+            <i class="fas fa-utensils"></i>
+            Cozinha Inspirada
+          </div>
+
+          <div class="user-section">
+            <div class="user-info">
+              <div class="user-avatar">
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="user-name">
+                <span id="user-name" class="user-name-text">USUÁRIO</span>
+              </div>
+            </div>
+
+            <button id="logout-btn" class="logout-btn">
+              <i class="fas fa-sign-out-alt"></i>
+              <span class="d-none d-md-inline">Sair</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <div class="page-header">
+          <h1 class="page-title">Suas Receitas</h1>
+          <button id="new-recipe-btn" class="new-recipe-btn">
+            <i class="fas fa-plus"></i>
+            Nova Receita
+          </button>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input
+              type="text"
+              id="search-box"
+              class="search-box"
+              placeholder="Pesquisar receitas por nome..."
+            />
+          </div>
+
+          <div class="filters">
+            <button class="filter-btn active" data-filter="all">
+              <i class="fas fa-border-all"></i>
+              Todas
+            </button>
+            <button class="filter-btn" data-filter="minhas">
+              <i class="fas fa-user"></i>
+              Minhas Receitas
+            </button>
+          </div>
+        </div>
+
+        <div class="content-container"></div>
+      </main>
+
+      <div class="modal-overlay" id="modal-overlay"></div>
+      <div class="modal" id="form-modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 id="form-modal-title" class="modal-title">
+              <i class="fas fa-utensils"></i>
+              Nova Receita
+            </h3>
+            <button type="button" class="modal-close" id="modal-close-btn">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+
+          <div id="form-error" class="alert alert-error" style="display: none">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="error-message">Mensagem de erro</span>
+          </div>
+
+          <form id="recipe-form">
+            <input type="hidden" id="recipe-id" />
+
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="nome" class="form-label">
+                  <i class="fas fa-tag"></i>Nome da Receita
+                </label>
+                <input
+                  type="text"
+                  id="nome"
+                  name="nome"
+                  class="form-control"
+                  required
+                  placeholder="Ex: Risoto de Cogumelos"
+                />
+              </div>
+
+              <div class="form-row">
+                <div class="form-group form-group-half">
+                  <label for="tempo_preparo" class="form-label">
+                    <i class="fas fa-clock"></i>Tempo de Preparo
+                  </label>
+                  <input
+                    type="text"
+                    id="tempo_preparo"
+                    name="tempo_preparo"
+                    class="form-control"
+                    placeholder="Ex: 45 minutos"
+                  />
+                </div>
+
+                <div class="form-group form-group-half">
+                  <label for="rendimento" class="form-label">
+                    <i class="fas fa-users"></i>Rendimento
+                  </label>
+                  <input
+                    type="text"
+                    id="rendimento"
+                    name="rendimento"
+                    class="form-control"
+                    placeholder="Ex: 4 porções"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="ingredientes" class="form-label">
+                  <i class="fas fa-shopping-basket"></i>Ingredientes
+                </label>
+                <div class="textarea-container">
+                  <textarea
+                    id="ingredientes"
+                    name="ingredientes"
+                    class="form-control"
+                    rows="4"
+                    required
+                    placeholder="Liste um ingrediente por linha"
+                  ></textarea>
+                  <div class="textarea-hint">
+                    Liste um ingrediente por linha
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="modo_preparo" class="form-label">
+                  <i class="fas fa-list-ol"></i>Modo de Preparo
+                </label>
+                <div class="textarea-container">
+                  <textarea
+                    id="modo_preparo"
+                    name="modo_preparo"
+                    class="form-control"
+                    rows="6"
+                    required
+                    placeholder="Descreva os passos do preparo"
+                  ></textarea>
+                  <div class="textarea-hint">
+                    Seja detalhado para melhores resultados
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline" id="cancel-btn">
+                Cancelar
+              </button>
+              <button type="submit" class="btn btn-primary btn-save">
+                <i class="fas fa-save"></i>Salvar Receita
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let currentUser = { id: 1, nome: "USUÁRIO" };
+      let allRecipes = [
+        {
+          id: 1,
+          nome: "Risoto de Cogumelos",
+          tempo_preparo: "45 minutos",
+          rendimento: "4 porções",
+          ingredientes: "Arroz arbório\nCogumelos\nCaldo de legumes\nParmesão",
+          modo_preparo:
+            "1. Refogue os cogumelos.\n2. Adicione o arroz.\n3. Acrescente o caldo aos poucos.\n4. Finalize com parmesão.",
+          usuario_id: 1,
+          autor: "USUÁRIO",
+        },
+        {
+          id: 2,
+          nome: "Bolo de Cenoura",
+          tempo_preparo: "60 minutos",
+          rendimento: "8 fatias",
+          ingredientes: "Cenoura\nOvos\nAçúcar\nFarinha\nFermento",
+          modo_preparo:
+            "1. Bata os ingredientes.\n2. Leve ao forno.\n3. Faça a cobertura.",
+          usuario_id: 2,
+          autor: "USUÁRIO",
+        },
+      ];
+      let currentFilter = "all";
+
+      function formatIngredients(ingredientString) {
+        return ingredientString
+          .split("\n")
+          .map((item) => item.trim())
+          .filter((item) => item.length > 0)
+          .join("\n");
+      }
+
+      function renderRecipeCards(recipes) {
+        const contentContainer = document.querySelector(".content-container");
+
+        if (!recipes || recipes.length === 0) {
+          contentContainer.innerHTML = `
+            <div class="empty-state">
+              <svg class="empty-illustration" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- SVG omitido para brevidade -->
+              </svg>
+              <h3 class="empty-state-title">Nenhuma receita encontrada</h3>
+              <p class="empty-state-description">
+                Parece que você ainda não tem nenhuma receita cadastrada. Que tal começar a criar sua coleção de receitas favoritas agora? É fácil, rápido e você pode compartilhar com amigos e familiares.
+              </p>
+              <button onclick="openNewRecipeModal()" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Criar Minha Primeira Receita
+              </button>
+            </div>
+          `;
+          return;
+        }
+
+        const recipesGrid = document.createElement("div");
+        recipesGrid.className = "recipes-grid";
+        contentContainer.innerHTML = "";
+        contentContainer.appendChild(recipesGrid);
+
+        recipes.forEach((recipe, index) => {
+          const isOwner = recipe.usuario_id === currentUser.id;
+          const authorInitials = recipe.autor
+            ? recipe.autor.charAt(0).toUpperCase()
+            : "?";
+
+          const recipeCard = document.createElement("div");
+          recipeCard.className = "recipe-card";
+          recipeCard.setAttribute("data-owner", isOwner ? "true" : "false");
+          recipeCard.style.animationDelay = `${index * 0.05}s`;
+
+          recipeCard.innerHTML = `
+            <div class="recipe-img">
+              <i class="fas fa-utensils"></i>
+            </div>
+            <div class="recipe-content">
+              <h3 class="recipe-title">${recipe.nome}</h3>
+              <div class="recipe-meta">
+                <span><i class="fas fa-clock"></i> ${
+                  recipe.tempo_preparo || "Não informado"
+                }</span>
+                <span><i class="fas fa-utensils"></i> ${
+                  recipe.rendimento || "Não informado"
+                }</span>
+              </div>
+              <div class="recipe-author">
+                <div class="recipe-author-avatar">${authorInitials}</div>
+                <span class="recipe-author-name">Por ${recipe.autor}</span>
+              </div>
+              <div class="recipe-actions">
+                <button class="btn btn-primary btn-view" data-id="${recipe.id}">
+                  <i class="fas fa-eye"></i> Ver Detalhes
+                </button>
+              </div>
+            </div>
+          `;
+
+          recipesGrid.appendChild(recipeCard);
+
+          setTimeout(() => {
+            recipeCard.style.opacity = "0";
+            recipeCard.style.transform = "translateY(20px)";
+            recipeCard.style.transition =
+              "opacity 0.5s ease, transform 0.5s ease";
+
+            setTimeout(() => {
+              recipeCard.style.opacity = "1";
+              recipeCard.style.transform = "translateY(0)";
+            }, 50);
+          }, 0);
+        });
+      }
+
+      function loadRecipes(busca = "") {
+        let filteredRecipes = allRecipes;
+
+        if (busca && busca.trim()) {
+          const buscaLower = busca.toLowerCase();
+          filteredRecipes = filteredRecipes.filter(
+            (recipe) =>
+              recipe.nome && recipe.nome.toLowerCase().includes(buscaLower)
+          );
+        }
+
+        if (currentFilter === "minhas") {
+          filteredRecipes = filteredRecipes.filter(
+            (recipe) => recipe.usuario_id === currentUser.id
+          );
+        }
+
+        renderRecipeCards(filteredRecipes);
+      }
+
+      function openNewRecipeModal() {
+        document.getElementById("form-modal-title").innerHTML =
+          '<i class="fas fa-utensils"></i> Nova Receita';
+        document.getElementById("recipe-form").reset();
+        document.getElementById("recipe-id").value = "";
+        document.getElementById("form-error").style.display = "none";
+
+        const modal = document.getElementById("form-modal");
+        const overlay = document.getElementById("modal-overlay");
+
+        overlay.classList.add("active");
+        overlay.style.display = "block";
+
+        setTimeout(() => {
+          modal.style.display = "flex";
+          document.body.style.overflow = "hidden";
+        }, 50);
+      }
+
+      function closeFormModal() {
+        const modal = document.getElementById("form-modal");
+        const overlay = document.getElementById("modal-overlay");
+
+        overlay.classList.remove("active");
+
+        setTimeout(() => {
+          modal.style.display = "none";
+          overlay.style.display = "none";
+          document.body.style.overflow = "auto";
+        }, 300);
+      }
+
+      function showNotification(message, type = "success") {
+        const existingNotification = document.querySelector(".notification");
+        if (existingNotification) {
+          document.body.removeChild(existingNotification);
+        }
+
+        const notification = document.createElement("div");
+        notification.className = `notification notification-${type}`;
+
+        const icon = type === "success" ? "check-circle" : "info-circle";
+
+        notification.innerHTML = `
+          <i class="fas fa-${icon}"></i>
+          <span>${message}</span>
+        `;
+
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+          notification.style.opacity = "0";
+          notification.style.transform = "translateY(20px)";
+          notification.style.transition = "all 0.3s ease";
+
+          setTimeout(() => {
+            document.body.removeChild(notification);
+          }, 300);
+        }, 3000);
+      }
+
+      document
+        .getElementById("recipe-form")
+        .addEventListener("submit", (event) => {
+          event.preventDefault();
+
+          const submitButton = event.target.querySelector(
+            'button[type="submit"]'
+          );
+          const originalButtonContent = submitButton.innerHTML;
+          submitButton.innerHTML =
+            '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+          submitButton.disabled = true;
+
+          const recipeId = document.getElementById("recipe-id").value;
+          const errorElement = document.getElementById("form-error");
+          const errorMessageElement = document.getElementById("error-message");
+
+          const recipeData = {
+            id: recipeId
+              ? parseInt(recipeId)
+              : Math.max(...allRecipes.map((r) => r.id), 0) + 1,
+            nome: document.getElementById("nome").value.trim(),
+            ingredientes: formatIngredients(
+              document.getElementById("ingredientes").value
+            ),
+            modo_preparo: document.getElementById("modo_preparo").value.trim(),
+            tempo_preparo: document
+              .getElementById("tempo_preparo")
+              .value.trim(),
+            rendimento: document.getElementById("rendimento").value.trim(),
+            usuario_id: currentUser.id,
+            autor: currentUser.nome,
+          };
+
+          try {
+            if (recipeId) {
+              const idx = allRecipes.findIndex(
+                (rec) => rec.id === recipeData.id
+              );
+              if (idx !== -1) {
+                allRecipes[idx] = recipeData;
+              }
+            } else {
+              allRecipes.push(recipeData);
+            }
+
+            closeFormModal();
+            loadRecipes(document.getElementById("search-box").value);
+
+            showNotification(
+              recipeId
+                ? "Receita atualizada com sucesso!"
+                : "Receita criada com sucesso!",
+              "success"
+            );
+          } catch (error) {
+            errorMessageElement.textContent =
+              error.message || "Erro ao salvar receita";
+            errorElement.style.display = "block";
+
+            errorElement.style.animation = "none";
+            setTimeout(() => {
+              errorElement.style.animation = "alertFadeIn 0.3s forwards";
+            }, 10);
+          } finally {
+            submitButton.innerHTML = originalButtonContent;
+            submitButton.disabled = false;
+          }
+        });
+
+      document.getElementById("logout-btn").addEventListener("click", () => {
+        showNotification("Logout fictício realizado!", "info");
+        setTimeout(() => {
+          window.location.href = "/entrar";
+        }, 1200);
+      });
+
+      document
+        .getElementById("new-recipe-btn")
+        .addEventListener("click", openNewRecipeModal);
+      document
+        .getElementById("modal-close-btn")
+        .addEventListener("click", closeFormModal);
+      document
+        .getElementById("cancel-btn")
+        .addEventListener("click", closeFormModal);
+      document
+        .getElementById("modal-overlay")
+        .addEventListener("click", closeFormModal);
+
+      function debounce(func, wait) {
+        let timeout;
+        return function (...args) {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(this, args), wait);
+        };
+      }
+
+      document.getElementById("search-box").addEventListener(
+        "input",
+        debounce((event) => {
+          loadRecipes(event.target.value);
+        }, 500)
+      );
+
+      document.querySelectorAll(".filter-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".filter-btn")
+            .forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          currentFilter = btn.getAttribute("data-filter");
+
+          if (currentFilter === "all") {
+            renderRecipeCards(allRecipes);
+          } else {
+            const myRecipes = allRecipes.filter(
+              (recipe) => recipe.usuario_id === currentUser.id
+            );
+            renderRecipeCards(myRecipes);
+          }
+        });
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("user-name").textContent = currentUser.nome;
+        loadRecipes();
+      });
+    </script>
+  </body>
+</html>
