@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Cozinha Inspirada</title>
+    <link rel="stylesheet" href="/css/global.css" />
+    <link rel="stylesheet" href="/css/auth.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="auth-container">
+      <h2 class="auth-title">Bem-vindo de volta!</h2>
+
+      <div
+        id="error-message"
+        class="alert alert-error"
+        style="display: none"
+      ></div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label for="email" class="form-label">
+            <i
+              class="far fa-envelope"
+              style="margin-right: 8px; color: var(--primary-color)"
+            ></i
+            >Email:
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-control"
+            required
+            autocomplete="email"
+            placeholder="seu@email.com"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="senha" class="form-label">
+            <i
+              class="fas fa-lock"
+              style="margin-right: 8px; color: var(--primary-color)"
+            ></i
+            >Senha:
+          </label>
+          <input
+            type="password"
+            id="senha"
+            name="senha"
+            class="form-control"
+            required
+            autocomplete="current-password"
+            placeholder="Sua senha"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          style="width: 100%; margin-top: 10px"
+        >
+          Entrar
+        </button>
+      </form>
+
+      <p class="text-center mt-3">
+        Não tem uma conta?
+        <a
+          href="/cadastro"
+          style="color: var(--primary-color); font-weight: 600"
+          >Cadastre-se</a
+        >
+      </p>
+
+      <div style="text-align: center; margin-top: 2rem">
+        <a
+          href="/"
+          style="
+            color: var(--grey-text);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+          "
+        >
+          <i class="fas fa-home" style="margin-right: 8px"></i> Voltar para
+          início
+        </a>
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", (event) => {
+          event.preventDefault();
+
+          const submitButton = event.target.querySelector(
+            'button[type="submit"]'
+          );
+          submitButton.innerHTML =
+            '<i class="fas fa-spinner fa-spin"></i> Entrando...';
+          submitButton.disabled = true;
+
+          const email = document.getElementById("email").value.trim();
+          const senha = document.getElementById("senha").value;
+          const errorElement = document.getElementById("error-message");
+
+          errorElement.style.display = "none";
+
+          setTimeout(() => {
+            if (email === "teste@teste.com" && senha === "123456") {
+              window.location.href = "/receitas";
+            } else {
+              errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i> Email ou senha inválidos.`;
+              errorElement.style.display = "block";
+              submitButton.innerHTML = "Entrar";
+              submitButton.disabled = false;
+            }
+          }, 1000);
+        });
+
+      document.addEventListener("DOMContentLoaded", () => {});
+    </script>
+  </body>
+</html>
