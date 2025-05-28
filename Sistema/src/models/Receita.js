@@ -41,6 +41,16 @@ class Receita {
         conn.release();
         return res.affectedRows > 0;
     }
+
+    static async delete(id) {
+        const conn = await pool.getConnection();
+        const res = await conn.query(
+            `DELETE FROM receitas WHERE id=?`,
+            [id]
+        );
+        conn.release();
+        return res.affectedRows > 0;
+    }
 }
 
 module.exports = Receita;

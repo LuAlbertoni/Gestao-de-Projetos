@@ -5,5 +5,6 @@ const router = express.Router();
 
 router.post("/receitas", receitaController.criar);
 router.put("/receitas/:id", receitaController.atualizar);
+router.delete("/receitas/:id", receitaController.deletar);
 
 module.exports = router;

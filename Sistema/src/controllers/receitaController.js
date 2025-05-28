@@ -31,3 +31,17 @@ exports.atualizar = async (req, res, next) => {
         next(e);
     }
 };
+
+exports.deletar = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const ok = await Receita.delete(id);
+        if (!ok)
+            return res
+                .status(404)
+                .json({ error: "Receita não encontrada" });
+        res.json({ message: "Receita deletada" });
+    } catch (e) {
+        next(e);
+    }
+};
