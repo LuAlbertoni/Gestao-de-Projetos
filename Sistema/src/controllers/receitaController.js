@@ -17,3 +17,17 @@ exports.criar = async (req, res, next) => {
         next(e);
     }
 };
+
+exports.atualizar = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const ok = await Receita.update(id, req.body);
+        if (!ok)
+            return res
+                .status(404)
+                .json({ error: "Receita não encontrada" });
+        res.json({ message: "Receita atualizada" });
+    } catch (e) {
+        next(e);
+    }
+};

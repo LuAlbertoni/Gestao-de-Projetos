@@ -21,6 +21,26 @@ class Receita {
         conn.release();
         return rows[0] || null;
     }
+
+    static async update(
+        id,
+        { nome, ingredientes, modo_preparo, tempo_preparo, rendimento }
+    ) {
+        const conn = await pool.getConnection();
+        const res = await conn.query(
+            `UPDATE receitas SET nome=?, ingredientes=?, modo_preparo=?, tempo_preparo=?, rendimento=? WHERE id=?`,
+            [
+                nome,
+                ingredientes,
+                modo_preparo,
+                tempo_preparo,
+                rendimento,
+                id,
+            ]
+        );
+        conn.release();
+        return res.affectedRows > 0;
+    }
 }
 
 module.exports = Receita;
