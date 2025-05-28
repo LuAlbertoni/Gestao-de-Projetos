@@ -10,6 +10,13 @@ class Usuario {
         return rows[0] || null;
     }
 
+    static async findById(id) {
+        const conn = await pool.getConnection();
+        const rows = await conn.query("SELECT * FROM usuarios WHERE id = ?", [id]);
+        conn.release();
+        return rows[0] || null;
+    }
+
     static async create({ nome, email, senha }) {
         const conn = await pool.getConnection();
         const res = await conn.query(

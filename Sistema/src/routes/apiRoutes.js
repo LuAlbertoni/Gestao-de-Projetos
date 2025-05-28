@@ -6,6 +6,7 @@ const router = express.Router();
 
 // Usuários
 router.post("/auth/register", authController.register);
+router.post("/auth/login", authController.login);
 
 // Receitas
 router.post("/receitas", receitaController.criar);
