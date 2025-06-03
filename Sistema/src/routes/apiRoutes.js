@@ -14,5 +14,6 @@ router.post("/auth/logout", authController.logout);
 router.post("/receitas", receitaController.criar);
 router.put("/receitas/:id", receitaController.atualizar);
 router.delete("/receitas/:id", receitaController.deletar);
+router.get("/receitas", receitaController.listar);
 
 module.exports = router;
