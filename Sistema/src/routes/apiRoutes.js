@@ -15,5 +15,6 @@ router.post("/receitas", receitaController.criar);
 router.put("/receitas/:id", receitaController.atualizar);
 router.delete("/receitas/:id", receitaController.deletar);
 router.get("/receitas", receitaController.listar);
+router.get("/receitas/:id", receitaController.detalhar);
 
 module.exports = router;

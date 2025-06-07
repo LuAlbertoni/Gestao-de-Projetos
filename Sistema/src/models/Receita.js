@@ -40,6 +40,16 @@ class Receita {
     return rows;
   }
 
+  static async findById(id) {
+    const conn = await pool.getConnection();
+    const rows = await conn.query(
+      `SELECT r.*, u.nome as autor FROM receitas r LEFT JOIN usuarios u ON r.usuario_id = u.id WHERE r.id = ?`,
+      [id]
+    );
+    conn.release();
+    return rows[0] || null;
+  }
+
   static async update(
     id,
     { nome, ingredientes, modo_preparo, tempo_preparo, rendimento },

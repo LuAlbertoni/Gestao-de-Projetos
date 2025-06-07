@@ -10,6 +10,18 @@ exports.listar = async (req, res, next) => {
   }
 };
 
+exports.detalhar = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const receita = await Receita.findById(id);
+    if (!receita)
+      return res.status(404).json({ error: "Receita não encontrada" });
+    res.json(receita);
+  } catch (e) {
+    next(e);
+  }
+};
+
 exports.criar = async (req, res, next) => {
   try {
     const { nome, ingredientes, modo_preparo, tempo_preparo, rendimento } =
