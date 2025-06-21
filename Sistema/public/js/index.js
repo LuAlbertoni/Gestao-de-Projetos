@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
+  fetch("/api/auth/me", { credentials: "include" }).then((response) => {
+    if (response.ok) {
+      window.location.href = "/receitas";
+    }
+  });
+
   const menuToggle = document.getElementById("menuToggle");
   const mobileMenu = document.getElementById("mobileMenu");
   menuToggle.addEventListener("click", () => {
@@ -12,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
       icon.classList.add("fa-bars");
     }
   });
+
   const mobileLinks = mobileMenu.querySelectorAll("a");
   mobileLinks.forEach((link) => {
     link.addEventListener("click", () => {

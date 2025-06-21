@@ -123,10 +123,11 @@
       </div>
     </div>
 
+    <script src="/js/auth.js"></script>
     <script>
       document
         .getElementById("register-form")
-        .addEventListener("submit", (event) => {
+        .addEventListener("submit", async (event) => {
           event.preventDefault();
 
           const submitButton = event.target.querySelector(
@@ -145,25 +146,33 @@
           errorElement.style.display = "none";
           successElement.style.display = "none";
 
-          setTimeout(() => {
-            if (nome && email && senha.length >= 6) {
-              successElement.innerHTML =
-                '<i class="fas fa-check-circle"></i> Conta criada com sucesso! Redirecionando...';
-              successElement.style.display = "block";
-              document.getElementById("register-form").reset();
-              setTimeout(() => {
-                window.location.href = "/entrar";
-              }, 2000);
-            } else {
-              errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i> Verifique os dados inseridos.`;
-              errorElement.style.display = "block";
-              submitButton.innerHTML = "Criar Conta";
-              submitButton.disabled = false;
-            }
-          }, 1200);
+          try {
+            await register(nome, email, senha);
+
+            successElement.innerHTML =
+              '<i class="fas fa-check-circle"></i> Conta criada com sucesso! Redirecionando...';
+            successElement.style.display = "block";
+
+            document.getElementById("register-form").reset();
+
+            setTimeout(() => {
+              window.location.href = "/entrar";
+            }, 2000);
+          } catch (error) {
+            errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${
+              error.message || "Erro ao registrar"
+            }`;
+            errorElement.style.display = "block";
+            submitButton.innerHTML = "Criar Conta";
+            submitButton.disabled = false;
+          }
         });
 
-      document.addEventListener("DOMContentLoaded", () => {
+      document.addEventListener("DOMContentLoaded", async () => {
+        const user = await getCurrentUser();
+        if (user) {
+          window.location.href = "/receitas";
+        }
       });
     </script>
   </body>

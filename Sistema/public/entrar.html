@@ -94,10 +94,11 @@
       </div>
     </div>
 
+    <script src="/js/auth.js"></script>
     <script>
       document
         .getElementById("login-form")
-        .addEventListener("submit", (event) => {
+        .addEventListener("submit", async (event) => {
           event.preventDefault();
 
           const submitButton = event.target.querySelector(
@@ -113,19 +114,25 @@
 
           errorElement.style.display = "none";
 
-          setTimeout(() => {
-            if (email === "teste@teste.com" && senha === "123456") {
-              window.location.href = "/receitas";
-            } else {
-              errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i> Email ou senha inválidos.`;
-              errorElement.style.display = "block";
-              submitButton.innerHTML = "Entrar";
-              submitButton.disabled = false;
-            }
-          }, 1000);
+          try {
+            await login(email, senha);
+            window.location.href = "/receitas";
+          } catch (error) {
+            errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${
+              error.message || "Erro ao fazer login"
+            }`;
+            errorElement.style.display = "block";
+            submitButton.innerHTML = "Entrar";
+            submitButton.disabled = false;
+          }
         });
 
-      document.addEventListener("DOMContentLoaded", () => {});
+      document.addEventListener("DOMContentLoaded", async () => {
+        const user = await getCurrentUser();
+        if (user) {
+          window.location.href = "/receitas";
+        }
+      });
     </script>
   </body>
 </html>
