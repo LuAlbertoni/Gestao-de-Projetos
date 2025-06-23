@@ -6,7 +6,10 @@
     <title>Detalhes da Receita - Cozinha Inspirada</title>
     <link rel="stylesheet" href="/css/global.css" />
     <link rel="stylesheet" href="/css/receitas.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
   </head>
   <body>
     <div class="app-container">
@@ -16,15 +19,19 @@
             <i class="fas fa-utensils"></i>
             <a href="/receitas">Cozinha Inspirada</a>
           </div>
+
           <div class="user-section">
             <div class="user-info">
               <div class="user-avatar">
                 <i class="fas fa-user"></i>
               </div>
               <div class="user-name">
-                <span id="user-name" class="user-name-text">USUÁRIO</span>
+                <span id="user-name" class="user-name-text"
+                  >LuAlbertonicerto</span
+                >
               </div>
             </div>
+
             <button id="logout-btn" class="logout-btn">
               <i class="fas fa-sign-out-alt"></i>
               <span class="d-none d-md-inline">Sair</span>
@@ -32,18 +39,32 @@
           </div>
         </div>
       </header>
+
       <main class="main-content">
-        <div id="recipe-details">
+        <div id="loading-message" class="loading-container">
+          <div class="loader"></div>
+          <p class="loading-text">Carregando sua receita...</p>
+        </div>
+
+        <div id="recipe-details" style="display: none">
           <div id="recipe-header" class="recipe-header">
             <div class="recipe-detail-content">
               <h1 id="recipe-title" class="recipe-detail-title"></h1>
               <div class="recipe-detail-meta">
-                <span><i class="fas fa-user"></i> <span id="recipe-author"></span></span>
-                <span><i class="fas fa-clock"></i> <span id="recipe-time"></span></span>
-                <span><i class="fas fa-utensils"></i> <span id="recipe-yield"></span></span>
+                <span
+                  ><i class="fas fa-user"></i> <span id="recipe-author"></span
+                ></span>
+                <span
+                  ><i class="fas fa-clock"></i> <span id="recipe-time"></span
+                ></span>
+                <span
+                  ><i class="fas fa-utensils"></i>
+                  <span id="recipe-yield"></span
+                ></span>
               </div>
             </div>
           </div>
+
           <div class="recipe-body">
             <div class="recipe-section">
               <h3 class="recipe-section-title">
@@ -51,23 +72,34 @@
               </h3>
               <ul id="recipe-ingredients" class="recipe-ingredients-list"></ul>
             </div>
+
             <div class="recipe-section recipe-instructions">
               <h3 class="recipe-section-title">
                 <i class="fas fa-list-ol"></i>Modo de Preparo
               </h3>
               <ol id="recipe-instructions"></ol>
             </div>
+
             <div class="actions-bar">
               <a href="/receitas" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i>Voltar para Receitas
               </a>
-              <button id="edit-button" class="btn btn-primary" style="display: inline-block">
+              <button
+                id="edit-button"
+                class="btn btn-primary"
+                style="display: none"
+              >
                 <i class="fas fa-edit"></i>Editar Receita
               </button>
-              <button id="delete-button" class="btn btn-danger" style="display: inline-block">
+              <button
+                id="delete-button"
+                class="btn btn-danger"
+                style="display: none"
+              >
                 <i class="fas fa-trash"></i>Excluir Receita
               </button>
             </div>
+
             <div class="share-buttons">
               <p style="color: var(--grey-text); font-weight: 500">
                 Compartilhe esta receita:
@@ -89,59 +121,160 @@
             </div>
           </div>
         </div>
+
+        <div id="error-message" class="alert alert-error" style="display: none">
+          <i class="fas fa-exclamation-triangle"></i>
+          Receita não encontrada ou você não tem permissão para acessá-la.
+        </div>
       </main>
+
       <div id="form-modal" class="modal">
         <div class="modal-content">
           <div class="modal-header">
             <h3 class="modal-title">
               <i class="fas fa-edit"></i>Editar Receita
             </h3>
-            <button type="button" class="modal-close" onclick="closeFormModal()">
+            <button
+              type="button"
+              class="modal-close"
+              onclick="closeFormModal()"
+            >
               <i class="fas fa-times"></i>
             </button>
           </div>
+
+          <div
+            id="form-error"
+            class="alert alert-error"
+            style="display: none; margin: 20px 25px 0"
+          >
+            <i class="fas fa-exclamation-circle"></i>
+            <span>Erro ao atualizar a receita</span>
+          </div>
+
           <form id="recipe-form">
             <div style="padding: 25px 0">
               <div class="form-group">
                 <label for="nome" class="form-label">
-                  <i class="fas fa-tag" style="color: var(--primary-color); margin-right: 8px"></i>
+                  <i
+                    class="fas fa-tag"
+                    style="color: var(--primary-color); margin-right: 8px"
+                  ></i>
                   Nome da Receita
                 </label>
-                <input type="text" id="nome" name="nome" class="form-control" required placeholder="Ex: Risoto de Cogumelos"/>
+                <input
+                  type="text"
+                  id="nome"
+                  name="nome"
+                  class="form-control"
+                  required
+                  placeholder="Ex: Risoto de Cogumelos"
+                />
               </div>
+
               <div class="form-group">
                 <label for="ingredientes" class="form-label">
-                  <i class="fas fa-shopping-basket" style="color: var(--primary-color); margin-right: 8px"></i>
+                  <i
+                    class="fas fa-shopping-basket"
+                    style="color: var(--primary-color); margin-right: 8px"
+                  ></i>
                   Ingredientes
                 </label>
-                <textarea id="ingredientes" name="ingredientes" class="form-control" rows="5" required placeholder="Liste um ingrediente por linha"></textarea>
+                <textarea
+                  id="ingredientes"
+                  name="ingredientes"
+                  class="form-control"
+                  rows="5"
+                  required
+                  placeholder="Liste um ingrediente por linha"
+                ></textarea>
+                <small
+                  style="
+                    display: block;
+                    margin-top: 5px;
+                    color: var(--grey-text);
+                    font-size: 0.85rem;
+                  "
+                >
+                  <i class="fas fa-info-circle"></i>
+                  Liste um ingrediente por linha para melhor visualização
+                </small>
               </div>
+
               <div class="form-group">
                 <label for="modo_preparo" class="form-label">
-                  <i class="fas fa-list-ol" style="color: var(--primary-color); margin-right: 8px"></i>
+                  <i
+                    class="fas fa-list-ol"
+                    style="color: var(--primary-color); margin-right: 8px"
+                  ></i>
                   Modo de Preparo
                 </label>
-                <textarea id="modo_preparo" name="modo_preparo" class="form-control" rows="7" required placeholder="Descreva os passos do preparo, um por linha"></textarea>
+                <textarea
+                  id="modo_preparo"
+                  name="modo_preparo"
+                  class="form-control"
+                  rows="7"
+                  required
+                  placeholder="Descreva os passos do preparo, um por linha"
+                ></textarea>
+                <small
+                  style="
+                    display: block;
+                    margin-top: 5px;
+                    color: var(--grey-text);
+                    font-size: 0.85rem;
+                  "
+                >
+                  <i class="fas fa-info-circle"></i>
+                  Descreva cada passo em uma linha para melhor visualização
+                </small>
               </div>
+
               <div style="display: flex; gap: 20px; padding: 0 25px">
                 <div class="form-group" style="flex: 1; padding: 0">
                   <label for="tempo_preparo" class="form-label">
-                    <i class="fas fa-clock" style="color: var(--primary-color); margin-right: 8px"></i>
+                    <i
+                      class="fas fa-clock"
+                      style="color: var(--primary-color); margin-right: 8px"
+                    ></i>
                     Tempo de Preparo
                   </label>
-                  <input type="text" id="tempo_preparo" name="tempo_preparo" class="form-control" placeholder="Ex: 45 minutos"/>
+                  <input
+                    type="text"
+                    id="tempo_preparo"
+                    name="tempo_preparo"
+                    class="form-control"
+                    placeholder="Ex: 45 minutos"
+                  />
                 </div>
+
                 <div class="form-group" style="flex: 1; padding: 0">
                   <label for="rendimento" class="form-label">
-                    <i class="fas fa-users" style="color: var(--primary-color); margin-right: 8px"></i>
+                    <i
+                      class="fas fa-users"
+                      style="color: var(--primary-color); margin-right: 8px"
+                    ></i>
                     Rendimento
                   </label>
-                  <input type="text" id="rendimento" name="rendimento" class="form-control" placeholder="Ex: 4 porções"/>
+                  <input
+                    type="text"
+                    id="rendimento"
+                    name="rendimento"
+                    class="form-control"
+                    placeholder="Ex: 4 porções"
+                  />
                 </div>
               </div>
             </div>
+
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" onclick="closeFormModal()">Cancelar</button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                onclick="closeFormModal()"
+              >
+                Cancelar
+              </button>
               <button type="submit" class="btn btn-primary">
                 <i class="fas fa-save"></i>Salvar Alterações
               </button>
@@ -149,12 +282,16 @@
           </form>
         </div>
       </div>
+
       <footer class="app-footer">
         <div class="container">
           <div class="footer-content">
             <div>
               <h3 class="footer-title">Cozinha Inspirada</h3>
-              <p>Seu espaço para armazenar, descobrir e compartilhar receitas incríveis.</p>
+              <p>
+                Seu espaço para armazenar, descobrir e compartilhar receitas
+                incríveis.
+              </p>
             </div>
           </div>
           <div class="footer-bottom">
@@ -163,44 +300,112 @@
         </div>
       </footer>
     </div>
-    <script>
-      let currentUser = { id: 1, nome: "USUÁRIO" };
-      let currentRecipe = {
-        id: 1,
-        nome: "Risoto de Cogumelos",
-        tempo_preparo: "45 minutos",
-        rendimento: "4 porções",
-        ingredientes: "Arroz arbório\nCogumelos\nCaldo de legumes\nParmesão",
-        modo_preparo: "1. Refogue os cogumelos.\n2. Adicione o arroz.\n3. Acrescente o caldo aos poucos.\n4. Finalize com parmesão.",
-        usuario_id: 1,
-        autor: "USUÁRIO",
-      };
 
-      function formatToList(text) {
-        return text.split("\n").map(item => item.trim()).filter(item => item.length > 0);
+    <script src="/js/auth.js"></script>
+    <script src="/js/receitas.js"></script>
+    <script>
+      let currentUser = null;
+      let currentRecipe = null;
+
+      function getRecipeIdFromUrl() {
+        const parts = window.location.pathname.split("/");
+        const filtered = parts.filter(Boolean);
+        return filtered[filtered.length - 1];
       }
 
-      function loadRecipe() {
-        document.getElementById("recipe-title").textContent = currentRecipe.nome;
-        document.getElementById("recipe-author").textContent = currentRecipe.autor;
-        document.getElementById("recipe-time").textContent = currentRecipe.tempo_preparo || "Não informado";
-        document.getElementById("recipe-yield").textContent = currentRecipe.rendimento || "Não informado";
+      function formatToList(text) {
+        return text
+          .split("\n")
+          .map((item) => item.trim())
+          .filter((item) => item.length > 0);
+      }
 
-        const ingredientsList = document.getElementById("recipe-ingredients");
-        const ingredients = formatToList(currentRecipe.ingredientes);
-        ingredientsList.innerHTML = ingredients.map(ing => `<li>${ing}</li>`).join("");
+      async function loadRecipe() {
+        const recipeId = getRecipeIdFromUrl();
+        if (!recipeId) {
+          document.getElementById("loading-message").style.display = "none";
+          document.getElementById("error-message").style.display = "block";
+          return;
+        }
 
-        const instructionsList = document.getElementById("recipe-instructions");
-        const instructions = formatToList(currentRecipe.modo_preparo);
-        instructionsList.innerHTML = instructions.map(step => `<li>${step}</li>`).join("");
+        try {
+          currentRecipe = await getReceitaById(recipeId);
+          document.getElementById("recipe-title").textContent =
+            currentRecipe.nome;
+          document.getElementById("recipe-author").textContent =
+            currentRecipe.autor;
+          document.getElementById("recipe-time").textContent =
+            currentRecipe.tempo_preparo || "Não informado";
+          document.getElementById("recipe-yield").textContent =
+            currentRecipe.rendimento || "Não informado";
+
+          const ingredientsList = document.getElementById("recipe-ingredients");
+          const ingredients = formatToList(currentRecipe.ingredientes);
+          ingredientsList.innerHTML = ingredients
+            .map((ing) => `<li>${ing}</li>`)
+            .join("");
+
+          const instructionsList = document.getElementById(
+            "recipe-instructions"
+          );
+          const instructions = formatToList(currentRecipe.modo_preparo);
+          instructionsList.innerHTML = instructions
+            .map((step) => `<li>${step}</li>`)
+            .join("");
+
+          document.title = `${currentRecipe.nome} - Cozinha Inspirada`;
+
+          if (currentUser && currentRecipe.usuario_id === currentUser.id) {
+            document.getElementById("edit-button").style.display = "block";
+            document.getElementById("delete-button").style.display = "block";
+          }
+
+          document.getElementById("loading-message").style.display = "none";
+          document.getElementById("recipe-details").style.display = "block";
+
+          const sections = document.querySelectorAll(".recipe-section");
+          sections.forEach((section, index) => {
+            section.style.opacity = "0";
+            section.style.transform = "translateY(20px)";
+            section.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+
+            setTimeout(() => {
+              section.style.opacity = "1";
+              section.style.transform = "translateY(0)";
+            }, 200 * (index + 1));
+          });
+        } catch (error) {
+          document.getElementById("loading-message").style.display = "none";
+          document.getElementById("error-message").style.display = "block";
+        }
+      }
+
+      async function loadUser() {
+        try {
+          currentUser = await getCurrentUser();
+          if (!currentUser) {
+            window.location.href = "/entrar";
+            return;
+          }
+
+          document.getElementById("user-name").textContent = currentUser.nome;
+          await loadRecipe();
+        } catch (error) {
+          window.location.href = "/entrar";
+        }
       }
 
       function openEditModal() {
         document.getElementById("nome").value = currentRecipe.nome;
-        document.getElementById("ingredientes").value = currentRecipe.ingredientes;
-        document.getElementById("modo_preparo").value = currentRecipe.modo_preparo;
-        document.getElementById("tempo_preparo").value = currentRecipe.tempo_preparo || "";
-        document.getElementById("rendimento").value = currentRecipe.rendimento || "";
+        document.getElementById("ingredientes").value =
+          currentRecipe.ingredientes;
+        document.getElementById("modo_preparo").value =
+          currentRecipe.modo_preparo;
+        document.getElementById("tempo_preparo").value =
+          currentRecipe.tempo_preparo || "";
+        document.getElementById("rendimento").value =
+          currentRecipe.rendimento || "";
+        document.getElementById("form-error").style.display = "none";
         document.getElementById("form-modal").style.display = "flex";
         document.body.style.overflow = "hidden";
       }
@@ -210,30 +415,198 @@
         document.body.style.overflow = "auto";
       }
 
-      document.getElementById("user-name").textContent = currentUser.nome;
-      loadRecipe();
+      function showNotification(message, type = "success") {
+        const notification = document.createElement("div");
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+          <i class="fas fa-${
+            type === "success" ? "check-circle" : "exclamation-circle"
+          }"></i>
+          <span>${message}</span>
+        `;
 
-      document.getElementById("logout-btn").addEventListener("click", () => {
-        alert("Logout fictício realizado!");
-        window.location.href = "/entrar";
-      });
+        notification.style.position = "fixed";
+        notification.style.bottom = "20px";
+        notification.style.right = "20px";
+        notification.style.padding = "15px 20px";
+        notification.style.backgroundColor =
+          type === "success" ? "#1cd8a7" : "#ff5252";
+        notification.style.color = "white";
+        notification.style.borderRadius = "8px";
+        notification.style.boxShadow = "0 5px 15px rgba(0, 0, 0, 0.1)";
+        notification.style.display = "flex";
+        notification.style.alignItems = "center";
+        notification.style.gap = "10px";
+        notification.style.zIndex = "1000";
+        notification.style.animation = "slideUpFade 0.3s forwards";
 
-      document.getElementById("edit-button").addEventListener("click", openEditModal);
-      document.getElementById("delete-button").addEventListener("click", () => {
-        alert("Exclusão fictícia realizada! (Nada será removido de verdade)");
-      });
+        document.body.appendChild(notification);
 
-      document.getElementById("recipe-form").addEventListener("submit", function (event) {
-        event.preventDefault();
-        currentRecipe.nome = document.getElementById("nome").value.trim();
-        currentRecipe.ingredientes = document.getElementById("ingredientes").value.trim();
-        currentRecipe.modo_preparo = document.getElementById("modo_preparo").value.trim();
-        currentRecipe.tempo_preparo = document.getElementById("tempo_preparo").value.trim();
-        currentRecipe.rendimento = document.getElementById("rendimento").value.trim();
-        closeFormModal();
-        loadRecipe();
-        alert("Alterações fictícias salvas!");
-      });
+        const style = document.createElement("style");
+        style.innerHTML = `
+          @keyframes slideUpFade {
+            from {
+              opacity: 0;
+              transform: translateY(20px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+        `;
+        document.head.appendChild(style);
+
+        setTimeout(() => {
+          notification.style.opacity = "0";
+          notification.style.transform = "translateY(20px)";
+          notification.style.transition = "all 0.3s ease";
+
+          setTimeout(() => {
+            notification.remove();
+            style.remove();
+          }, 300);
+        }, 3000);
+      }
+
+      document.getElementById("logout-btn").addEventListener("click", logout);
+
+      document
+        .getElementById("edit-button")
+        .addEventListener("click", openEditModal);
+
+      document
+        .getElementById("delete-button")
+        .addEventListener("click", async function () {
+          if (
+            !currentRecipe ||
+            !currentUser ||
+            currentRecipe.usuario_id !== currentUser.id
+          ) {
+            showNotification(
+              "Você não tem permissão para excluir esta receita.",
+              "error"
+            );
+            return;
+          }
+
+          const confirmModal = document.createElement("div");
+          confirmModal.className = "modal";
+          confirmModal.style.display = "flex";
+          confirmModal.innerHTML = `
+          <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+              <h3 class="modal-title">
+                <i class="fas fa-trash" style="color: #ff5252;"></i>
+                Confirmar Exclusão
+              </h3>
+              <button type="button" class="modal-close" id="cancel-delete">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <div style="padding: 25px;">
+              <p style="margin-top: 0;">Tem certeza que deseja excluir a receita <strong>${currentRecipe.nome}</strong>?</p>
+              <p style="margin-bottom: 0; color: var(--grey-text);">Essa ação não poderá ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" id="btn-cancel-delete">
+                Cancelar
+              </button>
+              <button type="button" class="btn btn-danger" id="btn-confirm-delete">
+                <i class="fas fa-trash"></i>
+                Excluir Permanentemente
+              </button>
+            </div>
+          </div>
+        `;
+
+          document.body.appendChild(confirmModal);
+          document.body.style.overflow = "hidden";
+
+          function cancelDelete() {
+            document.body.removeChild(confirmModal);
+            document.body.style.overflow = "auto";
+          }
+
+          document
+            .getElementById("cancel-delete")
+            .addEventListener("click", cancelDelete);
+          document
+            .getElementById("btn-cancel-delete")
+            .addEventListener("click", cancelDelete);
+
+          document
+            .getElementById("btn-confirm-delete")
+            .addEventListener("click", async function () {
+              try {
+                this.innerHTML =
+                  '<i class="fas fa-spinner fa-spin"></i> Excluindo...';
+                this.disabled = true;
+
+                await deleteReceita(currentRecipe.id);
+
+                document.body.removeChild(confirmModal);
+                document.body.style.overflow = "auto";
+
+                showNotification("Receita excluída com sucesso!", "success");
+
+                setTimeout(() => {
+                  window.location.href = "/receitas";
+                }, 1000);
+              } catch (error) {
+                this.innerHTML =
+                  '<i class="fas fa-trash"></i> Excluir Permanentemente';
+                this.disabled = false;
+                showNotification(
+                  "Não foi possível excluir a receita. Tente novamente.",
+                  "error"
+                );
+              }
+            });
+        });
+
+      document
+        .getElementById("recipe-form")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+
+          const submitButton = event.target.querySelector(
+            'button[type="submit"]'
+          );
+          const originalButtonContent = submitButton.innerHTML;
+          submitButton.innerHTML =
+            '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+          submitButton.disabled = true;
+
+          const recipeData = {
+            nome: document.getElementById("nome").value.trim(),
+            ingredientes: document.getElementById("ingredientes").value.trim(),
+            modo_preparo: document.getElementById("modo_preparo").value.trim(),
+            tempo_preparo: document
+              .getElementById("tempo_preparo")
+              .value.trim(),
+            rendimento: document.getElementById("rendimento").value.trim(),
+          };
+
+          try {
+            await updateReceita(currentRecipe.id, recipeData);
+            closeFormModal();
+            showNotification("Receita atualizada com sucesso!", "success");
+
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          } catch (error) {
+            document.getElementById("form-error").innerHTML = `
+            <i class="fas fa-exclamation-circle"></i>
+            <span>${error.message || "Erro ao atualizar receita"}</span>
+          `;
+            document.getElementById("form-error").style.display = "block";
+          } finally {
+            submitButton.innerHTML = originalButtonContent;
+            submitButton.disabled = false;
+          }
+        });
 
       document.querySelectorAll(".share-btn").forEach((button) => {
         button.addEventListener("click", function () {
@@ -241,25 +614,37 @@
           const title = document.getElementById("recipe-title").textContent;
           const platform = this.getAttribute("data-platform");
           let shareUrl = "";
+
           switch (platform) {
             case "facebook":
-              shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+              shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                url
+              )}`;
               break;
             case "twitter":
-              shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
+              shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                title
+              )}&url=${encodeURIComponent(url)}`;
               break;
             case "pinterest":
-              shareUrl = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(url)}&description=${encodeURIComponent(title)}`;
+              shareUrl = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(
+                url
+              )}&description=${encodeURIComponent(title)}`;
               break;
             case "whatsapp":
-              shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(title + " - " + url)}`;
+              shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
+                title + " - " + url
+              )}`;
               break;
           }
+
           if (shareUrl) {
             window.open(shareUrl, "_blank", "width=600,height=400");
           }
         });
       });
+
+      document.addEventListener("DOMContentLoaded", loadUser);
 
       window.addEventListener("click", function (event) {
         const modal = document.getElementById("form-modal");
